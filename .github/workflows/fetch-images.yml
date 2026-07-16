@@ -1,0 +1,21 @@
+name: Fetch images
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p images
+          cd images
+          for f in Logo1.png THERMXX.png VenaPro-P1026229-450x450-1.png The-micro-Z-removebg-preview.png Back-Brace.png Walkers.jpg; do
+            curl -sL -o "$f" "https://venoussystemsinc.com/wp-content/uploads/2026/05/$f"
+          done
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add images
+          git commit -m "Add self-hosted site images"
+          git push
